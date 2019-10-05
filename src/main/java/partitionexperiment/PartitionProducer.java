@@ -16,7 +16,7 @@ public class PartitionProducer {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         List<Message> messages = new ArrayList<>();
-        for (int r = 0; r < 1000; r++) {
+        for (int r = 0; r < 100000; r++) {
             for (int v = 0; v < 200; v++) {
                 messages.add(new Message(r, v));
             }
