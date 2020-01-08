@@ -1,0 +1,21 @@
+version: "2.1"
+services:
+  jobmanager:
+    build: ./flink-s3
+    network_mode: host
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=localhost
+      - JVM_ARGS=-Djavax.net.ssl.trustStore=/mnt/foo
+
+  taskmanager:
+    build: ./flink-s3
+    network_mode: host
+    command: taskmanager
+    depends_on:
+      - jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=localhost
+      - JVM_ARGS=-Djavax.net.ssl.trustStore=/mnt/foo
