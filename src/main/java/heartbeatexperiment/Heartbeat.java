@@ -1,6 +1,6 @@
 package heartbeatexperiment;
 
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.java.functions.NullByteKeySelector;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -13,7 +13,7 @@ public class Heartbeat {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
         DataStream<String> stuff = env.socketTextStream("localhost", 8888, "\n");
-        DataStream<String> keyedStuff = stuff.keyBy(it -> it);
+        DataStream<String> keyedStuff = stuff.keyBy(new NullByteKeySelector<>());
         DataStream<String> stuffWithHearbeat = keyedStuff.process(new ProcessFunction<String, String>() {
             @Override
             public void processElement(String value, Context ctx, Collector<String> out) throws Exception {
